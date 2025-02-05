@@ -11,15 +11,24 @@ class DynFibonacci {
 
 public:
     // TODO: 实现动态设置容量的构造器
-    DynFibonacci(int capacity): cache(new ?), cached(?) {}
+    DynFibonacci(int capacity) : cache(new size_t[capacity]), cached(1) {
+        if (capacity < 2) {
+            throw std::invalid_argument("Capacity must be at least 2");
+        }
+        cache[0] = 0;  // 初始化第一个斐波那契数
+        cache[1] = 1;  // 初始化第二个斐波那契数
+    }
 
     // TODO: 实现析构器，释放缓存空间
-    ~DynFibonacci();
+    ~DynFibonacci() {
+        delete[] cache;  // 释放动态分配的内存
+    }
 
     // TODO: 实现正确的缓存优化斐波那契计算
     size_t get(int i) {
-        for (; false; ++cached) {
-            cache[cached] = cache[cached - 1] + cache[cached - 2];
+        // 如果需要的值尚未缓存，则计算并填充缓存
+        for (; cached < i; ++cached) {
+            cache[cached + 1] = cache[cached] + cache[cached - 1];
         }
         return cache[i];
     }
