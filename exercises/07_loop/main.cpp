@@ -5,11 +5,17 @@
 // READ: 纯函数 <https://zh.wikipedia.org/wiki/%E7%BA%AF%E5%87%BD%E6%95%B0>
 static unsigned long long fibonacci(int i) {
     // TODO: 为缓存设置正确的初始值
-    static unsigned long long cache[96]={0, 1}, cached=1;
+
+    static unsigned long long cache[96]{0,1};
+    static unsigned long long cached = 1;
     // TODO: 设置正确的循环条件
-    for (; cached<=i; ++cached) {
-        cache[cached] = cache[cached - 1] + cache[cached - 2];
+    if (i > cached) {
+        for (int j = cached + 1; j <= i; ++j) {
+            cache[j] = cache[j - 1] + cache[j - 2];
+        }
+        cached = i;  // 更新缓存的最大索引
     }
+
     return cache[i];
 }
 
@@ -22,7 +28,6 @@ int main(int argc, char **argv) {
     ASSERT(fibonacci(10) == 55, "fibonacci(10) should be 55");
 
     auto fib90 = fibonacci(90);
-    std::cout << "fibonacci(90) = " << fib90 << std::endl;
     ASSERT(fib90 == 2880067194370816120, "fibonacci(90) should be 2880067194370816120");
     return 0;
 }
